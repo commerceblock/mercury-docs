@@ -1,0 +1,8 @@
+{
+  "label": "NodeJS client",
+  "position": 4,
+  "link": {
+    "type": "generated-index",
+    "description": "NodeJS client docs"
+  }
+}
