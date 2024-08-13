@@ -4,7 +4,7 @@ sidebar_position: 3
 
 # Lightning Latch
 
-A *latch* transfer enables a statecoin to be transferred on condition of the sucessful payment of a Lightning network invoice. This is a protocol that enforces atomicity of a statecoin transfer and lightning payment - it can be used for the sale of a statecoin UTXO for an arbtrary amount of bitcoin in a private and non-custodial way without counterparty risk. 
+A *latch* transfer enables a statecoin to be transferred only on condition of the sucessful payment of a Lightning network invoice. This is a protocol that enforces atomicity of a statecoin transfer and lightning payment - it can be used for the sale of a statecoin UTXO for an arbtrary amount of bitcoin in a private and non-custodial way without counterparty risk. 
 
 The latch transfer protocol uses the method of *Hodl invoices* (https://guide.bolt.fun/guide/invoices/hodl-invoice) where funds are locked until the payment hash pre-image is revealed. A hodl invoice can be resolved in one of two ways: 
 
@@ -15,7 +15,7 @@ Using this mechanism, a lightning network payment can be made but only completed
 
 ## Protocol
 
-The statecoin server database will have 4 additional values for each `statechain_id`: `batch_id` (string), `batch-time` (integer), `pre-image` (string), `locked_1` (boolen) and `locked_2` (boolen). By default `batch_id`, `batch-time` are null and `locked` is `false`. The server is configured with `batch-timeout` parameter in seconds (in practice this will be some number of minutes to enable both parties to complete the trade). 
+The statecoin server database will have 4 additional values for each `statechain_id`: `batch_id` (string), `batch-time` (integer), `pre-image` (string), `locked_1` (boolen) and `locked_2` (boolen). By default `batch_id`, `batch-time` are null and `locked` is `false`. The server is configured with `batch-timeout` parameter in seconds (in practice this will be some number of minutes to enable both parties to complete the trade). The `batch-timeout` must be less than the hold payment locktime, in order to prevent the lightning network payment to be double-spent within the batch time. 
 
 The transfer will then proceed as follows:
 
