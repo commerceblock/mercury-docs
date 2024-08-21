@@ -71,6 +71,15 @@ const config = {
             label: 'Docs',
           },
           {
+            href: 'https://t.me/mercury_layer',
+            label: 'Telegram',
+            position: 'right',
+          },{
+            href: 'https://twitter.com/mercurylayer',
+            label: 'Twitter',
+            position: 'right',
+          },
+          {
             href: 'https://github.com/commerceblock/mercurylayer',
             label: 'GitHub',
             position: 'right',
