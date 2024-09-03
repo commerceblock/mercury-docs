@@ -2,6 +2,8 @@
 sidebar_position: 1
 ---
 
+
+
 # Token payment process
 
 This document describes the `/token/token_init` endpoint, which returns a response like the following example:
@@ -69,4 +71,4 @@ with the `processor_id`. This will return the on-chain payment amount (in millis
 }
 ```
 
-Once the payment is made, calling the `/token/token_verify/<token_id>` endpoint will return `true` or `false`. If `true`, the `token_id` can then be used with the client deposit functions.
+Once the payment is made, calling the `/token/token_verify/<token_id>` endpoint verifies the payment is received and will return `true` or `false`. If `true`, the `token_id` can then be used with the client deposit functions.
