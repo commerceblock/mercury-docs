@@ -22,7 +22,7 @@ A user wants to create a statechain for a specific amount of bitcoin, and they r
 4. The server then generates a private key: `s1`, calculates the corresponding public key and sends it to Owner 1: `S1 = s1.G` along with a `statechain_id` (UUID). The server then stores `s1` indexed with `statechain_id`. 
 5. Owner 1 then adds the public key they receive to their own public key to obtain the shared (aggregated) public key `P` (which corresponds to a shared private key of `p = o1 + s1`): `P = O1 + S1`
 6. Owner 1 creates and broadcasts a funding transaction (`Tx0`) to pay an amount `A` to the address corresponding to `P`. This defines the UTXO `TxID:vout` (the outpoint). 
-8. Owner 1 creates an unsigned *backup transaction* (`Tx1`) that pays the `P` output of `Tx0` to address of `O1`, and sets the `nLocktime` to the initial future block height `h0` (where `h0 = cheight + hinit`, `cheight` is the current Bitcoin block height and `hinit` is the initial locktime specified by the server).
+8. Owner 1 creates an unsigned *backup transaction* (`Tx1`) that pays the `P` output of `Tx0` to address of `O1`, and sets the `nLocktime` to the initial future block height `h0` (where `h0 = cheight + hinit`, `cheight` is the current Bitcoin block height and `hinit` is the initial locktime specified by the server). The `nSequence` number is set to zero. 
 9. Owner 1 the utilises the server to generate a valid signature on `Tx1` as follows:
 
 ### Signature generation
@@ -45,7 +45,7 @@ Owner 1 wishes to transfer the value of the coin `A` to a new owner (Owner 2). T
 
 1. The receiver (Owner 2) generates a statechain private key share `o2`. They then compute the corresponding public key `O2 = o2.G` along with a new `auth_pubkey`. 
 2. `O2||auth_pubkey` then represents the Owner 2 'address' and is communicated to Owner 1 (or published) in order for them to 'send' the ownership.
-3. Owner 1 then creates a new unsigned backup transaction `Tx2` paying the output of `Tx0` to address of `O2`, and sets the `nLocktime` to `h0 - (n-1)*c` where `c` is the confirmation interval and `n` is the owner number (i.e. 2). 
+3. Owner 1 then creates a new unsigned backup transaction `Tx2` paying the output of `Tx0` to address of `O2`, and sets the `nLocktime` to `h0 - (n-1)*c` where `c` is the confirmation interval and `n` is the owner number (i.e. 2).  The `nSequence` number is set to zero. 
 4. Owner 1 cooperates with server to generate a blind partial signature on `Tx2` as follows:
 
 ### Signature generation
@@ -75,9 +75,11 @@ Owner 1 computes `sig2_2 = r2_2 + c2.o1` and `sig_2 = sig1_2 + sig2_2`. The full
 2. Owner 2 verifies that the latest backup transaction pays to `O2` and that the input (`Tx0`) is unspent and pays to `P`. 
 3. Owner 2 takes the list of previous `K` backup transactions (`Txi i=1,...,K`) and for each one `i` verifies:
 	a. The signature is valid. 
-	b. The `nLocktimes` are decremented correctly (i.e. the latest `TxK` is the lowest). 
-4. Owner 2 queries server for 1) The total number of signatures generated for `statechain_id`: `N` and 2) Current server public key share: `S1`. 
-5. Owner 2 then verifies that `K = N` and then `O1 + S1 = P`
+	b. The `nLocktimes` are decremented correctly (i.e. the latest `TxK` is the lowest).
+	c. The transaction has been constructed exactly according to the sender implimentation.
+	d. That the latest `nLocktime` is not expired accordning to the current block height. 
+5. Owner 2 queries server for 1) The total number of signatures generated for `statechain_id`: `N` and 2) Current server public key share: `S1`. 
+6. Owner 2 then verifies that `K = N` and then `O1 + S1 = P`
 
 The server key share update then proceeds as follows:
 
