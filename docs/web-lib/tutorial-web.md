@@ -2,7 +2,7 @@
 sidebar_position: 1
 ---
 
-# Tutorial - Mercuru web library
+# Tutorial - Mercury web library
 
 To use the Mercury web client library, first clone the mercurylayer repository:
 
