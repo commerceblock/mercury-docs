@@ -69,6 +69,8 @@ First, add the `mercuryweblib` to the `package.json` file:
 }
 ```
 
+Run: `npm install`
+
 Then create a a config file `ClientConfig.js` in the `src/` directory, with:
 
 ```js
