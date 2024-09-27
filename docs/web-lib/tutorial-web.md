@@ -86,7 +86,7 @@ export default clientConfig;
 
 Then edit the file `src/App.jsx`:
 
-Add imports:
+At the very top of the file, add the following two line:
 
 ```js
 import mercuryweblib from 'mercuryweblib';
