@@ -6,6 +6,10 @@ sidebar_position: 1
 
 This tutorial demonstrates the usage of the mercury web library in a simple react app using [vitejs.dev](http://vitejs.dev). 
 
+## Requirements
+
+This tutorial assumes access to a command line terminal with [npm[(https://www.npmjs.com/) installed, and a `WASM` compatible web browser. 
+
 ## Installation
 
 Clone the mercurylayer repository:
