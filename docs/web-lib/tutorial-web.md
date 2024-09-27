@@ -288,7 +288,7 @@ const handleIsBatchTransferChange = (event) => {
 };
 ```
 
-Then finally add these HTML components directly after the line:
+Then finally add these HTML components directly after the line `<h1>Vite + React</h1>`:
 
 ```js
 <div className="card">
