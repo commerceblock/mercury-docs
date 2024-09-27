@@ -93,7 +93,7 @@ import mercuryweblib from 'mercuryweblib';
 import clientConfig from './ClientConfig';
 ```
 
-Add react hooks for mercury functions:
+Immediately after, the line `function App() {` add the following lines:
 
 ```js
 const [inputWallet, setInputWallet] = useState('');
@@ -104,7 +104,7 @@ const [batchId, setBatchId] = useState('');
 const [isBatchTransfer, setBatchTransfer] = useState(false);
 ```
 
-Then add wallet functions:
+Then add wallet functions immediately after this section:
 
 ```js
 const createWallet = async () => {
@@ -288,7 +288,7 @@ const handleIsBatchTransferChange = (event) => {
 };
 ```
 
-Then add the components to the page:
+Then finally add these HTML components directly after the line:
 
 ```js
 <div className="card">
