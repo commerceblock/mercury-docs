@@ -80,6 +80,8 @@ const clientConfig = {
   confirmationTarget: 2,
   maxFee: 1
 };
+
+export default clientConfig;
 ```
 
 Then edit the file `src/App.jsx`:
