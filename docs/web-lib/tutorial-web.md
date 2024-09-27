@@ -288,83 +288,114 @@ const handleIsBatchTransferChange = (event) => {
 };
 ```
 
-Then finally add these HTML components directly after the line `<h1>Vite + React</h1>`:
+Then finally add these HTML components (replace everything in the `return( ...  )` section):
 
 ```js
-<div className="card">
-  <input
-    type="text"
-    value={inputWallet}
-    onChange={(e) => setInputWallet(e.target.value)}
-    placeholder="Enter wallet name"
-    style={{ marginRight: '10px' }}
-  />
+    <>
+      <div>
+        <a href="https://vitejs.dev" target="_blank">
+          <img src={viteLogo} className="logo" alt="Vite logo" />
+        </a>
+        <a href="https://react.dev" target="_blank">
+          <img src={reactLogo} className="logo react" alt="React logo" />
+        </a>
+      </div>
+      <h1>Vite + React</h1>
 
-  <input
-    type="text"
-    value={inputAmount}
-    onChange={(e) => setInputAmount(e.target.value)}
-    placeholder="Enter amount"
-    style={{ marginRight: '10px' }}
-  />
+      <div className="card">
+        <input
+          type="text"
+          value={inputWallet}
+          onChange={(e) => setInputWallet(e.target.value)}
+          placeholder="Enter wallet name"
+          style={{ marginRight: '10px' }}
+        />
 
-  <input
-    type="text"
-    value={inputStatechainId}
-    onChange={(e) => setInputStatechainId(e.target.value)}
-    placeholder="Enter statechain id"
-    style={{ marginRight: '10px' }}
-  />
+        <input
+          type="text"
+          value={inputAmount}
+          onChange={(e) => setInputAmount(e.target.value)}
+          placeholder="Enter amount"
+          style={{ marginRight: '10px' }}
+        />
 
-  <input
-    type="text"
-    value={inputToAddress}
-    onChange={(e) => setInputToAddress(e.target.value)}
-    placeholder="Enter recipient address"
-    style={{ marginRight: '10px' }}
-  />
+        <input
+          type="text"
+          value={inputStatechainId}
+          onChange={(e) => setInputStatechainId(e.target.value)}
+          placeholder="Enter statechain id"
+          style={{ marginRight: '10px' }}
+        />
 
-  <input
-    type="text"
-    value={batchId}
-    onChange={(e) => setBatchId(e.target.value)}
-    placeholder="Enter batchId"
-    style={{ marginRight: '10px' }}
-  />
+        <input
+          type="text"
+          value={inputToAddress}
+          onChange={(e) => setInputToAddress(e.target.value)}
+          placeholder="Enter recipient address"
+          style={{ marginRight: '10px' }}
+        />
 
-<div className="card">
-  <button onClick={() => setCount((count) => count + 1)}>
-    count is {count}
-  </button>
-  <button onClick={() => createWallet()}>
-    Create Wallet
-  </button>
-  <button onClick={() => newToken()}>
-    New Token
-  </button>
-  <button onClick={() => getDepositBitcoinAddress()}>
-    New Deposit Address
-  </button>
-  <button onClick={() => listStatecoins()}>
-    List Statecoins
-  </button>
-  <button onClick={() => withdrawCoin()}>
-    Withdraw
-  </button>
-  <button onClick={() => broadcastBackupTransaction()}>
-    Broadcast Backup Transaction
-  </button>
-  <br  />
-  <button onClick={() => newTransferAddress()} style={{ marginTop: '10px' }}>
-    New Transfer Address
-  </button>
-  <button onClick={() => transferSend()} style={{ marginTop: '10px' }}>
-    Transfer Send
-  </button>
-  <button onClick={() => transferReceive()} style={{ marginTop: '10px' }}>
-    Transfer Receive
-  </button>
-</div>
+        <input
+          type="text"
+          value={batchId}
+          onChange={(e) => setBatchId(e.target.value)}
+          placeholder="Enter batchId"
+          style={{ marginRight: '10px' }}
+        />
+
+
+      <label>
+        <input
+          type="checkbox"
+          checked={isBatchTransfer}
+          onChange={handleIsBatchTransferChange}
+        />
+        Is Batch Transfer ?
+      </label>
+
+      </div>
+
+      <div className="card">
+        <button onClick={() => setCount((count) => count + 1)}>
+          count is {count}
+        </button>
+        <button onClick={() => createWallet()}>
+          Create Wallet
+        </button>
+        <button onClick={() => newToken()}>
+          New Token
+        </button>
+        <button onClick={() => getDepositBitcoinAddress()}>
+          New Deposit Address
+        </button>
+        <button onClick={() => listStatecoins()}>
+          List Statecoins
+        </button>
+        <button onClick={() => withdrawCoin()}>
+          Withdraw
+        </button>
+        <button onClick={() => broadcastBackupTransaction()}>
+          Broadcast Backup Transaction
+        </button>
+        <br  />
+        <button onClick={() => newTransferAddress()} style={{ marginTop: '10px' }}>
+          New Transfer Address
+        </button>
+        <button onClick={() => transferSend()} style={{ marginTop: '10px' }}>
+          Transfer Send
+        </button>
+        <button onClick={() => transferReceive()} style={{ marginTop: '10px' }}>
+          Transfer Receive
+        </button>
+        <p>
+          Edit <code>src/App.jsx</code> and save to test HMR
+        </p>
+      </div>
+      
+      <p className="read-the-docs">
+        Click on the Vite and React logos to learn more
+      </p>
+    </>
 ```
 
 To run the demo-app in a browser:
