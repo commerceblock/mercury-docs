@@ -2,42 +2,79 @@
 sidebar_position: 1
 ---
 
-# Tutorial - Mercury web library
+# Tutorial - Mercury web-app library
 
-To use the Mercury web client library, first clone the mercurylayer repository:
+This tutorial demonstrates the usage of the mercury web library in a simple react app using [vitejs.dev](http://vitejs.dev). 
+
+## Installation
+
+Clone the mercurylayer repository:
 
 ```
 git clone https://github.com/commerceblock/mercurylayer.git
 ```
 
-Then switch to the `dev` branch:
+Then switch to the `main` branch:
 
 ```
 cd mercurylayer
-git checkout dev
+git checkout main
 ```
-
-Install dependencies for web:
 
 ```
 cd clients/libs/web
 npm install
+cd ../../apps
 ```
 
-Then in the application:
+## Web app
 
-Import the web library: 
+Initialise a react demo-app using vite:
 
-```js
-import mercuryweblib from 'mercuryweblib';
+```
+npm create vite@latest demo-app -- --template react
 ```
 
-Define the configuration object to set the mercury server and electrum endpoint:
+Then run:
+
+```
+cd demo-app
+npm install
+```
+
+This creates the following files in the `demo-app` directory:
+
+```
+README.md
+eslint.config.js
+index.html
+node_modules
+package-lock.json
+package.json
+public
+src/
+    App.css
+    App.jsx
+    assets
+    index.css
+    main.jsx
+vite.config.js
+```
+
+First, add the `mercuryweblib` to the `package.json` file:
+
+```
+"dependencies": {
+    "mercuryweblib": "file:../../libs/web",
+}
+```
+
+Then create a a config file `ClientConfig.js` in the `src/` directory, with:
 
 ```js
 const clientConfig = {
   esploraServer: "https://mutinynet.com",
-  statechainEntity: "http://test.mercurylayer.com:8500",
+  statechainEntity: "http://45.76.136.11:8500/",
   network: "testnet",
   feeRateTolerance: 5,
   confirmationTarget: 2,
@@ -45,84 +82,291 @@ const clientConfig = {
 };
 ```
 
-The test mercury key server URL is: `http://test.mercurylayer.com:8500`
+Then edit the file `src/App.jsx`:
 
-> Note that this is a test server. It is free to use, but there is no guarantee of persistence or security. Use only for testnet or signet coins. 
-
-Initialise a wallet using:
+Add imports:
 
 ```js
-let wallet1 = await mercuryweblib.createWallet(clientConfig, "wallet1");
+import mercuryweblib from 'mercuryweblib';
+import clientConfig from './ClientConfig';
 ```
 
-Create a second wallet to receieve a coin:
+Add react hooks for mercury functions:
 
 ```js
-let wallet2 = await mercuryweblib.createWallet(clientConfig, "wallet2");
+const [inputWallet, setInputWallet] = useState('');
+const [inputAmount, setInputAmount] = useState('1000');
+const [inputStatechainId, setInputStatechainId] = useState('');
+const [inputToAddress, setInputToAddress] = useState('');
+const [batchId, setBatchId] = useState('');
+const [isBatchTransfer, setBatchTransfer] = useState(false);
 ```
 
-In order to use the mercury layer key server, an access token is required in order to create a shared key. For the test server, tokens can be generated as follows and added to the wallet:
+Then add wallet functions:
 
 ```js
-await mercuryweblib.newToken(clientConfig, wallet1.name);
+const createWallet = async () => {
+  if (inputWallet === '') {
+    console.log('Please enter a wallet name');
+    return;
+  }
+
+  await mercuryweblib.createWallet(clientConfig, inputWallet);
+  console.log(`wallet ${inputWallet} created`);
+
+  setInputWallet('');
+};
+
+const newToken = async () => {
+  if (inputWallet === '') {
+    console.log('Please enter a wallet name');
+    return;
+  }
+
+  await mercuryweblib.newToken(clientConfig, inputWallet);
+  console.log(`token created in the wallet ${inputWallet}` );
+
+  setInputWallet('');
+};
+
+const getDepositBitcoinAddress = async () => {
+  if (inputWallet === '') {
+    console.log('Please enter a wallet name');
+    return;
+  }
+
+  if (inputAmount === '') {
+    console.log('Please enter an amount');
+    return;
+  }
+
+  const parsedAmount = parseInt(inputAmount, 10);
+
+  if (isNaN(parsedAmount)) {
+    console.error(`Error: Unable to convert "${inputAmount}" to an integer.`);
+  }
+
+  let btcAddr = await mercuryweblib.getDepositBitcoinAddress(clientConfig, inputWallet, parsedAmount);
+  console.log(`Address from wallet ${inputWallet}`);
+  console.log(btcAddr);
+
+  setInputWallet('');
+};
+
+const listStatecoins = async () => {
+  if (inputWallet === '') {
+    console.log('Please enter a wallet name');
+    return;
+  }
+
+  const coins = await mercuryweblib.listStatecoins(clientConfig, inputWallet);
+
+  console.log(`Coins from wallet ${inputWallet}`);
+  console.log(coins);
+
+  setInputWallet('');
+};
+
+const withdrawCoin = async () => {
+  if (inputWallet === '') {
+    console.log('Please enter a wallet name');
+    return;
+  }
+
+  if (inputStatechainId === '') {
+    console.log('Please enter a statechain id');
+    return;
+  }
+
+  if (inputToAddress === '') {
+    console.log('Please enter a recipient address');
+    return;
+  }
+
+  const txid = await mercuryweblib.withdrawCoin(clientConfig, inputWallet, inputStatechainId, inputToAddress, null);
+
+  console.log(`Withdraw txid: ${txid}`);
+
+  setInputWallet('');
+  setInputStatechainId('');
+  setInputToAddress('');
+};
+
+const broadcastBackupTransaction = async () => {
+
+  if (inputWallet === '') {
+    console.log('Please enter a wallet name');
+    return;
+  }
+
+  if (inputStatechainId === '') {
+    console.log('Please enter a statechain id');
+    return;
+  }
+
+  if (inputToAddress === '') {
+    console.log('Please enter a recipient address');
+    return;
+  }
+
+  const txids = await mercuryweblib.broadcastBackupTransaction(clientConfig, inputWallet, inputStatechainId, inputToAddress, null);
+
+  console.log("Txids:");
+  console.log(txids);
+
+  setInputWallet('');
+  setInputStatechainId('');
+  setInputToAddress('');
+};
+
+const newTransferAddress = async () => {
+  if (inputWallet === '') {
+    console.log('Please enter a wallet name');
+    return;
+  }
+
+  const transferAddress = await mercuryweblib.newTransferAddress(inputWallet, isBatchTransfer);
+
+  console.log(`Transfer address from wallet ${inputWallet}`);
+  console.log(transferAddress);
+
+  setInputWallet('');
+};
+
+const transferSend = async () => {
+
+  if (inputWallet === '') {
+    console.log('Please enter a wallet name');
+    return;
+  }
+
+  if (inputStatechainId === '') {
+    console.log('Please enter a statechain id');
+    return;
+  }
+
+  if (inputToAddress === '') {
+    console.log('Please enter a recipient address');
+    return;
+  }
+
+  let batchIdToSend = null;
+
+  if (!!batchId) {
+    batchIdToSend = batchId;
+  }
+
+  console.log(`batchIdToSend: ${batchIdToSend}`);
+
+  const coin = await mercuryweblib.transferSend(clientConfig, inputWallet, inputStatechainId, inputToAddress, batchIdToSend);
+  console.log("Coin:");
+  console.log(coin);
+
+  setInputWallet('');
+  setInputStatechainId('');
+  setInputToAddress('');
+};
+
+const transferReceive = async () => {
+
+  if (inputWallet === '') {
+    console.log('Please enter a wallet name');
+    return;
+  }
+
+  const received_statechain_ids = await mercuryweblib.transferReceive(clientConfig, inputWallet);
+  console.log("received_statechain_ids:");
+  console.log(received_statechain_ids);
+
+  setInputWallet('');
+};
+
+const handleIsBatchTransferChange = (event) => {
+  setBatchTransfer(event.target.checked);
+};
 ```
 
-With a valid token recieved by the client, it is then possible to generate a shared key and address (`depositAddress`) to deposit testnet bitcoin (e.g. `1000` sats) into:
+Then add the components to the page:
 
 ```js
-const amount = 1000;
-let result = await mercuryweblib.getDepositBitcoinAddress(clientConfig, wallet1.name, amount);
-const statechainId = result.statechain_id;
-const depositAddress = result.deposit_address;
+<div className="card">
+  <input
+    type="text"
+    value={inputWallet}
+    onChange={(e) => setInputWallet(e.target.value)}
+    placeholder="Enter wallet name"
+    style={{ marginRight: '10px' }}
+  />
+
+  <input
+    type="text"
+    value={inputAmount}
+    onChange={(e) => setInputAmount(e.target.value)}
+    placeholder="Enter amount"
+    style={{ marginRight: '10px' }}
+  />
+
+  <input
+    type="text"
+    value={inputStatechainId}
+    onChange={(e) => setInputStatechainId(e.target.value)}
+    placeholder="Enter statechain id"
+    style={{ marginRight: '10px' }}
+  />
+
+  <input
+    type="text"
+    value={inputToAddress}
+    onChange={(e) => setInputToAddress(e.target.value)}
+    placeholder="Enter recipient address"
+    style={{ marginRight: '10px' }}
+  />
+
+  <input
+    type="text"
+    value={batchId}
+    onChange={(e) => setBatchId(e.target.value)}
+    placeholder="Enter batchId"
+    style={{ marginRight: '10px' }}
+  />
+
+<div className="card">
+  <button onClick={() => setCount((count) => count + 1)}>
+    count is {count}
+  </button>
+  <button onClick={() => createWallet()}>
+    Create Wallet
+  </button>
+  <button onClick={() => newToken()}>
+    New Token
+  </button>
+  <button onClick={() => getDepositBitcoinAddress()}>
+    New Deposit Address
+  </button>
+  <button onClick={() => listStatecoins()}>
+    List Statecoins
+  </button>
+  <button onClick={() => withdrawCoin()}>
+    Withdraw
+  </button>
+  <button onClick={() => broadcastBackupTransaction()}>
+    Broadcast Backup Transaction
+  </button>
+  <br  />
+  <button onClick={() => newTransferAddress()} style={{ marginTop: '10px' }}>
+    New Transfer Address
+  </button>
+  <button onClick={() => transferSend()} style={{ marginTop: '10px' }}>
+    Transfer Send
+  </button>
+  <button onClick={() => transferReceive()} style={{ marginTop: '10px' }}>
+    Transfer Receive
+  </button>
+</div>
 ```
 
-Then pay the specified amount to it. For the mutinynet signet network, this payment can be made directly via the faucet: [faucet.mutinynet.com](https://faucet.mutinynet.com/)
+To run the demo-app in a browser:
 
-Once paid, run:
-
-```js
-const coins = await mercuryweblib.listStatecoins(clientConfig, wallet1.name);
 ```
-
-The `coins` array will contain a list of statecoins and their status (`coin.status`). `coin.status === CoinStatus.IN_MEMPOOL` means the deposit transaction is in the mempool. `coin.status === CoinStatus.CONFIRMED` means the deposit transaction has been confirmed, and the coin can now be transferrred to another user. 
-
-To generate a statecoin receieve address, run:
-
-```js
-let toAddress = await mercuryweblib.newTransferAddress(wallet2.name);
-```
-
-Which will generate a mercury layer address to recieve a coin to. e.g.:
-
-```js
-toAddress.transfer_receive
-"tml1qqp7m5tc9auxgwka84tez9vksky2lsp5uftyhhduakt75j8yq46wh3crh26fwzxw2akc43d9m0pvuhmuq57tcdtw7pz96zfsz8ck3d3jjf3q04re26"
-```
-
-This address can then be used to send a specified coin (with `statechainId`) coin to a specified statechain address:
-
-```js
-await mercuryweblib.transferSend(clientConfig, wallet1.name, statechainId, toAddress.transfer_receive, false, null);
-```
-
-The coin receiver (`wallet2`) then completes recieve with:
-
-```js
-const transferReceiveResult = await mercuryweblib.transferReceive(clientConfig, wallet2.name);
-```
-
-If the receive completes successfully `transferReceiveResult.receivedStatechainIds` will contain `statechainId`. 
-
-To withdraw the coin back to an onchain address (`toAddress`):
-
-```js
-await mercuryweblib.withdrawCoin(clientConfig, wallet2.name, statechainId, toAddress, null, null);
-```
-
-For the demo test coins, these can be sent back to an address generated by the faucet: [faucet.mutinynet.com](https://faucet.mutinynet.com/)
-
-In case the coin expires and the mercury server is unavailable, the backup transaction can be used for withdrawal as follows (with `feeRate` set to sats/byte):
-
-```js
-await mercuryweblib.broadcastBackupTransaction(clientConfig, wallet2.name, statechainId, toAddress, feeRate);
+npm run dev
 ```

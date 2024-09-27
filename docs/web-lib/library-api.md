@@ -4,7 +4,27 @@ sidebar_position: 2
 
 # Web library API
 
-Config:
+## Installation
+
+```
+git clone https://github.com/commerceblock/mercurylayer.git
+```
+
+Then switch to the `main` branch:
+
+```
+cd mercurylayer
+git checkout main
+```
+
+```
+cd clients/libs/web
+npm install
+```
+
+## Configuration
+
+Define the config object:
 
 ```js
 const clientConfig = {
@@ -16,6 +36,12 @@ const clientConfig = {
   maxFee: 1
 };
 ```
+
+`esploraServer` is the electrum esplora http server URL 
+`statechainEntity` is the mercury server URL
+`network` is "mainnet", "testnet", "signet" or "regtest"
+
+## Lib functions
 
 `createWallet(clientConfig, <wallet_name>);` to create a wallet
 
