@@ -39,7 +39,6 @@ Then run:
 
 ```
 cd demo-app
-npm install
 ```
 
 This creates the following files in the `demo-app` directory:
