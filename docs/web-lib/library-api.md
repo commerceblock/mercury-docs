@@ -4,7 +4,7 @@ sidebar_position: 2
 
 # Web library API
 
-## Installation
+## Installation from source
 
 ```
 git clone https://github.com/commerceblock/mercurylayer.git
@@ -20,6 +20,14 @@ git checkout main
 ```
 cd clients/libs/web
 npm install
+```
+
+## Installation via npm
+
+To install the `npm` [package](https://www.npmjs.com/package/mercuryweblib). 
+
+```
+npm i mercuryweblib
 ```
 
 ## Configuration
