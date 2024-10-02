@@ -1,8 +1,9 @@
 {
-    "label": "Token Payment",
-    "position": 5,
-    "link": {
-      "type": "generated-index"
-    }
+  "label": "Access Tokens",
+  "position": 5,
+  "link": {
+    "type": "generated-index",
+    "description": "Access Tokens"
   }
+}
   
