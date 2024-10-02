@@ -10,27 +10,6 @@ This tutorial demonstrates the usage of the mercury web library in a simple reac
 
 This tutorial assumes access to a command line terminal with [npm](https://www.npmjs.com/) installed, and a `WASM` compatible web browser. 
 
-## Installation
-
-Clone the mercurylayer repository:
-
-```
-git clone https://github.com/commerceblock/mercurylayer.git
-```
-
-Then switch to the `main` branch:
-
-```
-cd mercurylayer
-git checkout main
-```
-
-```
-cd clients/libs/web
-npm install
-cd ../../apps
-```
-
 ## Web app
 
 Initialise a react demo-app using vite:
@@ -68,11 +47,11 @@ First, add the `mercuryweblib` to the `package.json` file:
 
 ```
 "dependencies": {
-    "mercuryweblib": "file:../../libs/web",
+    "mercuryweblib": "0.0.3",
 }
 ```
 
-Run: `npm install`
+Save the file and run: `npm install` to install the library and dependencies. 
 
 Then create a a config file `ClientConfig.js` in the `src/` directory, with:
 
