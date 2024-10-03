@@ -36,7 +36,7 @@ In this directory is the `Settings.toml` file for the client. This needs to be e
 For the purposes of demonstration, use the following `Settings.toml`: 
 
 ```
-statechain_entity = "http://test.mercurylayer.com:8500"
+statechain_entity = "https://test.mercurylayer.com"
 electrum_server = "tcp://mutinynet.com:50001"
 electrum_type = "electrs"
 network = "signet"
