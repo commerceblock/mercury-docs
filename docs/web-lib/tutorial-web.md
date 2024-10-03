@@ -58,8 +58,8 @@ Then create a a config file `ClientConfig.js` in the `src/` directory, with:
 ```js
 const clientConfig = {
   esploraServer: "https://mutinynet.com",
-  statechainEntity: "http://45.76.136.11:8500/",
-  network: "testnet",
+  statechainEntity: "https://test.mercurylayer.com",
+  network: "signet",
   feeRateTolerance: 5,
   confirmationTarget: 2,
   maxFee: 1
